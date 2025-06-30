@@ -1,18 +1,19 @@
-import * as React from 'react';
-import { alpha, styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
-import MenuItem from '@mui/material/MenuItem';
-import Drawer from '@mui/material/Drawer';
-import MenuIcon from '@mui/icons-material/Menu';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-// import ColorModeIconDropdown from '.././theme/ColorModeIconDropdown';
-// import Sitemark from './SitemarkIcon';
+import * as React from 'react'
+import { alpha, styled, useColorScheme } from '@mui/material/styles'
+import Box from '@mui/material/Box'
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+import IconButton from '@mui/material/IconButton'
+import Container from '@mui/material/Container'
+import MenuItem from '@mui/material/MenuItem'
+import Drawer from '@mui/material/Drawer'
+import MenuIcon from '@mui/icons-material/Menu'
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
+import ThemeToggle from './ThemeToggle'
+import Logo from './logo'
+import CustomButton from './CustomButton'
+import Resume from '../../assets/PRATHMESH_WAKODIKAR_RESUME.pdf'
+import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline'
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -21,56 +22,78 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   flexShrink: 0,
   borderRadius: `calc(${theme.shape.borderRadius}px + 8px)`,
   backdropFilter: 'blur(24px)',
-  border: '1px solid',
   borderColor: (theme.vars || theme).palette.divider,
   backgroundColor: theme.vars
     ? `rgba(${theme.vars.palette.background.defaultChannel} / 0.4)`
     : alpha(theme.palette.background.default, 0.4),
-  boxShadow: (theme.vars || theme).shadows[1],
-  padding: '8px 12px',
-}));
+}))
 
 export default function Header() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false)
+
+  const { mode, setMode } = useColorScheme()
 
   const toggleDrawer = (newOpen) => () => {
-    setOpen(newOpen);
-  };
+    setOpen(newOpen)
+  }
+
+  const scrollTo = (id) => {
+    const element = document.getElementById(id)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 
   return (
     <AppBar
-      position="fixed"
+      position='fixed'
       enableColorOnDark
       sx={{
         boxShadow: 0,
         bgcolor: 'transparent',
         backgroundImage: 'none',
-        mt: 'calc(var(--template-frame-height, 0px) + 28px)',
+        pt: 'calc(var(--template-frame-height, 0px) + 28px)',
       }}
     >
-      <Container maxWidth="lg">
-        <StyledToolbar variant="dense" disableGutters>
-          <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
-            {/* <Sitemark /> */}
+      <Container maxWidth='lg'>
+        <StyledToolbar disableGutters>
+          <Box
+            sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}
+          >
+            <Logo />
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <Button variant="text" color="info" size="small">
-                Features
-              </Button>
-              <Button variant="text" color="info" size="small">
-                Testimonials
-              </Button>
-              <Button variant="text" color="info" size="small">
-                Highlights
-              </Button>
-              <Button variant="text" color="info" size="small">
-                Pricing
-              </Button>
-              <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }}>
-                FAQ
-              </Button>
-              <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }}>
-                Blog
-              </Button>
+              <CustomButton
+                variant='text'
+                color='info'
+                size='small'
+                onClick={() => scrollTo('home')}
+              >
+                HOME
+              </CustomButton>
+              <CustomButton
+                onClick={() => scrollTo('experience')}
+                variant='text'
+                color='info'
+                size='small'
+              >
+                Experience
+              </CustomButton>
+              <CustomButton
+                variant='text'
+                color='info'
+                size='small'
+                onClick={() => scrollTo('technology')}
+              >
+                Skills
+              </CustomButton>
+              <CustomButton
+                variant='text'
+                color='info'
+                size='small'
+                onClick={() => scrollTo('achivements')}
+              >
+                Achievements
+              </CustomButton>
             </Box>
           </Box>
           <Box
@@ -80,21 +103,38 @@ export default function Header() {
               alignItems: 'center',
             }}
           >
-            <Button color="primary" variant="text" size="small">
-              Sign in
-            </Button>
-            <Button color="primary" variant="contained" size="small">
-              Sign up
-            </Button>
-            {/* <ColorModeIconDropdown /> */}
+            <a
+              href={Resume}
+              download='Prathmesh_Wakodikar_Resume'
+              target='_blank'
+            >
+              <CustomButton color='primary' variant='contained' size='small'>
+                Download Resume
+              </CustomButton>
+            </a>
+            <ThemeToggle
+              checked={mode === 'dark'}
+              onChange={(event) => {
+                console.log(event.target.checked)
+                setMode(event.target.checked ? 'dark' : 'light')
+              }}
+            />
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>
-            {/* <ColorModeIconDropdown size="medium" /> */}
-            <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
+            <a
+              href={Resume}
+              download='Prathmesh_Wakodikar_Resume'
+              target='_blank'
+            >
+              <IconButton>
+                <DownloadForOfflineIcon />
+              </IconButton>
+            </a>
+            <IconButton aria-label='Menu button' onClick={toggleDrawer(true)}>
               <MenuIcon />
             </IconButton>
             <Drawer
-              anchor="top"
+              anchor='top'
               open={open}
               onClose={toggleDrawer(false)}
               PaperProps={{
@@ -107,29 +147,23 @@ export default function Header() {
                 <Box
                   sx={{
                     display: 'flex',
-                    justifyContent: 'flex-end',
+                    justifyContent: 'space-between',
                   }}
                 >
+                  <Logo />
                   <IconButton onClick={toggleDrawer(false)}>
                     <CloseRoundedIcon />
                   </IconButton>
                 </Box>
-                <MenuItem>Features</MenuItem>
-                <MenuItem>Testimonials</MenuItem>
-                <MenuItem>Highlights</MenuItem>
-                <MenuItem>Pricing</MenuItem>
-                <MenuItem>FAQ</MenuItem>
-                <MenuItem>Blog</MenuItem>
-                <Divider sx={{ my: 3 }} />
-                <MenuItem>
-                  <Button color="primary" variant="contained" fullWidth>
-                    Sign up
-                  </Button>
+                <MenuItem onClick={() => scrollTo('home')}>Home</MenuItem>
+                <MenuItem onClick={() => scrollTo('experience')}>
+                  Experience
                 </MenuItem>
-                <MenuItem>
-                  <Button color="primary" variant="outlined" fullWidth>
-                    Sign in
-                  </Button>
+                <MenuItem onClick={() => scrollTo('technology')}>
+                  Skills
+                </MenuItem>
+                <MenuItem onClick={() => scrollTo('achivements')}>
+                  Achievements
                 </MenuItem>
               </Box>
             </Drawer>
@@ -137,6 +171,5 @@ export default function Header() {
         </StyledToolbar>
       </Container>
     </AppBar>
-  );
+  )
 }
-
